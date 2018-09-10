@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import UserCard from './UserCard';
 
-const url = "https://wind-bow.glitch.me/twitch-api";
+const twitchApi = "https://wind-bow.glitch.me/twitch-api";
 
 class App extends Component {
 
@@ -12,34 +12,27 @@ class App extends Component {
     super();
 
     this.state = {
-      userNames: ['streamerhouse'],
-      userDataFromTwitch: [
-        {
-          name: 'spo0oky',
-          status: 'online',
-          game: 'Word of Warcraft'
-        },
-        {
-          name: 'Veneratio',
-          status: 'online',
-          game: 'Ragnarok Online'
-        }
-      ]
+      userNames: ['streamerhouse', 'kylestreamsstuff'],
+      userDataFromTwitch: []
     };
 
   }
 
   componentDidMount() {
 
-    // fetch(`${url}/streams/streamerhouse`)
+    this.state.userNames.forEach((name, index) => {
 
-    //   .then(response => {
-    //     return response.json();
-    //   })
+      fetch(`${twitchApi}/streams/${this.state.userNames[index]}`)
 
-    //   .then(data => {
-    //     console.log(data)
-    //   })
+        .then(response => {
+          return response.json();
+        })
+
+        .then(data => {
+          console.log(data);
+        })
+
+    });
 
   }
 
