@@ -5,10 +5,9 @@ const UserCard = (props) => {
   return props.userDataFromTwitch.map(user => {
 
     return (
-      <div className='user-card' key={user.name}>
-        <div>{user.name}</div>
-        <div>{user.status}</div>
-        <div>{user.game}</div>
+      <div className='user-card' key={user.stream.channel.display_name}>
+        <div>User: {user.stream.channel.display_name}</div>
+        <div>Playing: {user.stream.channel.game}</div>
       </div>
     )
 

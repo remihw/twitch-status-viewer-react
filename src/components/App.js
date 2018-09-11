@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
 import UserCard from './UserCard';
 
-const twitchApi = "https://wind-bow.glitch.me/twitch-api";
+const twitchApi = 'https://wind-bow.glitch.me/twitch-api/streams/';
+
+const getUserDataFromTwitch = function(userName) {
+
+  return fetch(`${twitchApi}${userName}`)
+    .then(response => response.json());
+
+};
 
 class App extends Component {
 
@@ -12,7 +18,7 @@ class App extends Component {
     super();
 
     this.state = {
-      userNames: ['streamerhouse', 'kylestreamsstuff'],
+      userNames: ['streamerhouse', 'saltybet', 'monstercat'],
       userDataFromTwitch: []
     };
 
@@ -20,19 +26,21 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.state.userNames.forEach((name, index) => {
+    let promises = [];
 
-      fetch(`${twitchApi}/streams/${this.state.userNames[index]}`)
-
-        .then(response => {
-          return response.json();
-        })
-
-        .then(data => {
-          console.log(data);
-        })
-
+    this.state.userNames.forEach(userName => {
+      promises.push(getUserDataFromTwitch(userName));
     });
+
+    Promise.all(promises)
+
+      .then(evt => {
+
+        this.setState({
+          userDataFromTwitch: evt
+        });
+
+      })
 
   }
 
@@ -44,6 +52,4 @@ class App extends Component {
 
 export default App;
 
-ReactDOM.render(
-  <App />, document.getElementById("container")
-);
+ReactDOM.render(<App />, document.getElementById("container"));
