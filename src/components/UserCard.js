@@ -9,7 +9,7 @@ const UserCard = (props) => {
         <div>User: {user.stream.channel.display_name}</div>
         <div>Playing: {user.stream.channel.game}</div>
       </div>
-    )
+    );
 
   });
 

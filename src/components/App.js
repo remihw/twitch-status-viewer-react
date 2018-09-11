@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import AddUserName from './AddUserName';
 import UserCard from './UserCard';
-
-const twitchApi = 'https://wind-bow.glitch.me/twitch-api/streams/';
-
-const getUserDataFromTwitch = function(userName) {
-
-  return fetch(`${twitchApi}${userName}`)
-    .then(response => response.json());
-
-};
 
 class App extends Component {
 
@@ -22,31 +14,42 @@ class App extends Component {
       userDataFromTwitch: []
     };
 
-  }
+  };
 
   componentDidMount() {
+    this.getAllUserDataFromTwitch();
+  };
+
+  getAllUserDataFromTwitch() {
 
     let promises = [];
 
     this.state.userNames.forEach(userName => {
-      promises.push(getUserDataFromTwitch(userName));
+      promises.push(this.getUserDataFromTwitch(userName));
     });
 
     Promise.all(promises)
+      .then(evt => this.setState({ userDataFromTwitch: evt }));
 
-      .then(evt => {
+  };
 
-        this.setState({
-          userDataFromTwitch: evt
-        });
+  getUserDataFromTwitch(userName) {
 
-      })
+    return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${userName}`)
+      .then(response => response.json());
 
-  }
+  };
 
   render() {
-    return <UserCard userDataFromTwitch={this.state.userDataFromTwitch} />
-  }
+
+    return (
+      <div>
+        <AddUserName />
+        <UserCard userDataFromTwitch={this.state.userDataFromTwitch} />
+      </div>
+    );
+
+  };
 
 }
 
