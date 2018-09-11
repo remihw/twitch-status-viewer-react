@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import AddUserName from './AddUserName';
+import AddUsername from './AddUsername';
 import UserCard from './UserCard';
 
 class App extends Component {
@@ -10,7 +10,7 @@ class App extends Component {
     super();
 
     this.state = {
-      userNames: ['streamerhouse', 'saltybet', 'monstercat'],
+      usernames: ['streamerhouse', 'saltybet', 'monstercat'],
       userDataFromTwitch: []
     };
 
@@ -24,8 +24,8 @@ class App extends Component {
 
     let promises = [];
 
-    this.state.userNames.forEach(userName => {
-      promises.push(this.getUserDataFromTwitch(userName));
+    this.state.usernames.forEach(username => {
+      promises.push(this.getUserDataFromTwitch(username));
     });
 
     Promise.all(promises)
@@ -33,10 +33,16 @@ class App extends Component {
 
   };
 
-  getUserDataFromTwitch(userName) {
+  getUserDataFromTwitch(username) {
 
-    return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${userName}`)
+    return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${username}`)
       .then(response => response.json());
+
+  };
+
+  addNewUsername(username) {
+
+    console.log('incoming username:', username)
 
   };
 
@@ -44,7 +50,7 @@ class App extends Component {
 
     return (
       <div>
-        <AddUserName />
+        <AddUsername addNewUsername={this.addNewUsername}/>
         <UserCard userDataFromTwitch={this.state.userDataFromTwitch} />
       </div>
     );
