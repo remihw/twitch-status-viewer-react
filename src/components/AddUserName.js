@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 
 class AddUserName extends Component {
 
-  handleSubmit() {
+  handleSubmit = () => {
     this.props.addNewUsername(this.refs.usernameInput.value);
+    this.refs.usernameInput.value = '';
   };
 
   render() {

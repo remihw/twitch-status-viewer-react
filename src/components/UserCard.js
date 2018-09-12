@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 const UserCard = (props) => {
 
+  // Todo: add scenario for offline users
+  console.log(props.userDataFromTwitch);
+
   return props.userDataFromTwitch.map(user => {
 
     return (
