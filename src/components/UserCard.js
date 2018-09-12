@@ -6,7 +6,7 @@ const UserCard = (props) => {
 
     return (
       <div className='user-card' key={user.stream.channel.display_name}>
-        <div>User: {user.stream.channel.display_name}</div>
+        <div>{user.stream.channel.display_name}</div>
         <div>Playing: {user.stream.channel.game}</div>
       </div>
     );

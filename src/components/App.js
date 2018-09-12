@@ -20,7 +20,7 @@ class App extends Component {
     this.getAllUserDataFromTwitch();
   };
 
-  getAllUserDataFromTwitch() {
+  getAllUserDataFromTwitch = () => {
 
     let promises = [];
 
@@ -33,16 +33,22 @@ class App extends Component {
 
   };
 
-  getUserDataFromTwitch(username) {
+  getUserDataFromTwitch = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${username}`)
       .then(response => response.json());
 
   };
 
-  addNewUsername(username) {
+  addNewUsername = (username) => {
 
-    console.log('incoming username:', username)
+    this.setState({ usernames: [...this.state.usernames, username] });
+
+    this.getUserDataFromTwitch(username)
+
+      .then(evt => this.setState({
+        userDataFromTwitch: [...this.state.userDataFromTwitch, evt]
+      }));
 
   };
 
