@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import AddUsername from './AddUsername';
-import UserCard from './UserCard';
+import UserStreamingCardList from './UserStreamingCardList';
+import UserChannelCardList from './UserChannelCardList.';
 
 class App extends Component {
 
@@ -10,8 +11,9 @@ class App extends Component {
     super();
 
     this.state = {
-      usernames: ['streamerhouse', 'saltybet', 'monstercat'],
-      userDataFromTwitch: []
+      usernames: ['streamerhouse', 'saltybet', 'monstercat', 'mtggoldfish'],
+      userStreamingData: [],
+      userChannelData: []
     };
 
   };
@@ -22,18 +24,30 @@ class App extends Component {
 
   getAllUserDataFromTwitch = () => {
 
-    let promises = [];
+    let promises = [],
+        streamingData = [],
+        channelData = [];
 
     this.state.usernames.forEach(username => {
-      promises.push(this.getUserStreamingDataFromTwitch(username));
+      promises.push(this.getUserStreamingData(username));
     });
 
     Promise.all(promises)
-      .then(evt => this.setState({ userDataFromTwitch: evt }));
+
+      .then(evt => {
+
+        console.log(evt);
+
+        this.setState({
+          userStreamingData: null,
+          userChannelData: null
+        })
+
+      });
 
   };
 
-  getUserStreamingDataFromTwitch = (username) => {
+  getUserStreamingData = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${username}`)
 
@@ -44,7 +58,7 @@ class App extends Component {
       .then(data => {
 
         if (data.stream === null) {
-          return this.getUserChannelDataFromTwitch(username);
+          return this.getUserChannelData(username);
         }
 
         return data;
@@ -53,7 +67,7 @@ class App extends Component {
 
   };
 
-  getUserChannelDataFromTwitch = (username) => {
+  getUserChannelData = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/channels/${username}`)
       .then(response => response.json());
@@ -64,10 +78,10 @@ class App extends Component {
 
     this.setState({ usernames: [...this.state.usernames, username] });
 
-    this.getUserStreamingDataFromTwitch(username)
+    this.getUserStreamingData(username)
 
       .then(evt => this.setState({
-        userDataFromTwitch: [...this.state.userDataFromTwitch, evt]
+        userStreamingData: [...this.state.userStreamingData, evt]
       }));
 
   };
@@ -76,8 +90,9 @@ class App extends Component {
 
     return (
       <div>
-        <AddUsername addNewUsername={this.addNewUsername}/>
-        <UserCard userDataFromTwitch={this.state.userDataFromTwitch} />
+        <AddUsername addNewUsername={this.addNewUsername} />
+        <UserStreamingCardList userStreamingData={this.state.userStreamingData} />
+        <UserChannelCardList userChannelData={this.state.userChannelData} />
       </div>
     );
 
