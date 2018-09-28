@@ -4,8 +4,8 @@ const UserChannelCard = (props) => {
 
   return (
     <div className='user-channel-card'>
-      <div>{}</div>
-      <div>{}</div>
+      <div>{props.user.display_name}</div>
+      <div>Offline</div>
     </div>
   );
 

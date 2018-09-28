@@ -24,9 +24,7 @@ class App extends Component {
 
   getAllUserDataFromTwitch = () => {
 
-    let promises = [],
-        streamingData = [],
-        channelData = [];
+    let promises = [];
 
     this.state.usernames.forEach(username => {
       promises.push(this.getUserStreamingData(username));
@@ -36,11 +34,13 @@ class App extends Component {
 
       .then(evt => {
 
-        console.log(evt);
-
         this.setState({
-          userStreamingData: null,
-          userChannelData: null
+          userStreamingData: evt.filter(
+            user => typeof(user.stream) !== 'undefined'
+          ),
+          userChannelData: evt.filter(
+            user => typeof(user.stream) === 'undefined'
+          )
         })
 
       });
@@ -91,8 +91,12 @@ class App extends Component {
     return (
       <div>
         <AddUsername addNewUsername={this.addNewUsername} />
-        <UserStreamingCardList userStreamingData={this.state.userStreamingData} />
-        <UserChannelCardList userChannelData={this.state.userChannelData} />
+        <div className='online-users'>
+          <UserStreamingCardList userStreamingData={this.state.userStreamingData} />
+        </div>
+        <div className='offine-users'>
+          <UserChannelCardList userChannelData={this.state.userChannelData} />
+        </div>
       </div>
     );
 
