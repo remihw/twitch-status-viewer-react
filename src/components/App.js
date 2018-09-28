@@ -11,7 +11,7 @@ class App extends Component {
     super();
 
     this.state = {
-      usernames: ['streamerhouse', 'saltybet', 'monstercat', 'mtggoldfish'],
+      usernames: ['streamerhouse', 'saltybet', 'mtggoldfish'],
       userStreamingData: [],
       userChannelData: []
     };
@@ -19,35 +19,24 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    this.getAllUserDataFromTwitch();
+    this.getDataFromTwitchForEachUsername();
   };
 
-  getAllUserDataFromTwitch = () => {
+  getDataFromTwitchForEachUsername = () => {
 
     let promises = [];
 
     this.state.usernames.forEach(username => {
-      promises.push(this.getUserStreamingData(username));
+      promises.push(this.getUserStreamingDataFromTwitch(username));
     });
 
     Promise.all(promises)
 
-      .then(evt => {
-
-        this.setState({
-          userStreamingData: evt.filter(
-            user => typeof(user.stream) !== 'undefined'
-          ),
-          userChannelData: evt.filter(
-            user => typeof(user.stream) === 'undefined'
-          )
-        })
-
-      });
+      .then(evt => this.updateUserStreamingAndChannelCards(evt));
 
   };
 
-  getUserStreamingData = (username) => {
+  getUserStreamingDataFromTwitch = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${username}`)
 
@@ -58,7 +47,7 @@ class App extends Component {
       .then(data => {
 
         if (data.stream === null) {
-          return this.getUserChannelData(username);
+          return this.getUserChannelDataFromTwitch(username);
         }
 
         return data;
@@ -67,37 +56,61 @@ class App extends Component {
 
   };
 
-  getUserChannelData = (username) => {
+  getUserChannelDataFromTwitch = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/channels/${username}`)
       .then(response => response.json());
 
   };
 
-  addNewUsername = (username) => {
+  updateUserStreamingAndChannelCards = (data) => {
+
+    const userStreamingData = data.filter(user => {
+            return typeof(user.stream) !== 'undefined'
+          }),
+          userChannelData = data.filter(user => {
+            return typeof(user.stream) === 'undefined'
+          });
+
+    this.setState({
+
+      userStreamingData:
+        [...this.state.userStreamingData, ...userStreamingData],
+      userChannelData:
+        [...this.state.userChannelData, ...userChannelData]
+
+    });
+
+  };
+
+  addNewTwitchUsername = (username) => {
 
     this.setState({ usernames: [...this.state.usernames, username] });
 
     this.getUserStreamingData(username)
 
-      .then(evt => this.setState({
-        userStreamingData: [...this.state.userStreamingData, evt]
-      }));
+      .then(evt => this.updateUserDataFromTwitch([ evt ]));
 
   };
 
   render() {
 
     return (
+
       <div>
-        <AddUsername addNewUsername={this.addNewUsername} />
+
+        <div><AddUsername addNewTwitchUsername={this.addNewTwitchUsername} /></div>
+
         <div className='online-users'>
           <UserStreamingCardList userStreamingData={this.state.userStreamingData} />
         </div>
+
         <div className='offine-users'>
           <UserChannelCardList userChannelData={this.state.userChannelData} />
         </div>
+
       </div>
+
     );
 
   };
