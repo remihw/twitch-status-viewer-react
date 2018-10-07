@@ -87,9 +87,9 @@ class App extends Component {
 
     this.setState({ usernames: [...this.state.usernames, username] });
 
-    this.getUserStreamingData(username)
+    this.getUserStreamingDataFromTwitch(username)
 
-      .then(evt => this.updateUserDataFromTwitch([ evt ]));
+      .then(evt => this.updateUserStreamingAndChannelCards([ evt ]));
 
   };
 
@@ -99,13 +99,17 @@ class App extends Component {
 
       <div>
 
-        <div><AddUsername addNewTwitchUsername={this.addNewTwitchUsername} /></div>
+        <div>
+          <AddUsername addNewTwitchUsername={this.addNewTwitchUsername} />
+        </div>
 
-        <div className='online-users'>
+        <h3>Streaming:</h3>
+        <div className='cards-container'>
           <UserStreamingCardList userStreamingData={this.state.userStreamingData} />
         </div>
 
-        <div className='offine-users'>
+        <h3>Offline:</h3>
+        <div className='cards-container'>
           <UserChannelCardList userChannelData={this.state.userChannelData} />
         </div>
 

@@ -12,7 +12,7 @@ class AddUserName extends Component {
     return (
       <div className='add-username'>
         <input ref='usernameInput'></input>
-        <button onClick={this.handleSubmit.bind(this)}>Add</button>
+        <button className='btn-add' onClick={this.handleSubmit.bind(this)}><span>+</span></button>
       </div>
     );
 
