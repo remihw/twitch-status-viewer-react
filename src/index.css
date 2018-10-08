@@ -8,6 +8,35 @@ h3 {
   margin: 0 8px;
 }
 
+.add-username {
+  margin: 0 8px 30px;
+  display: flex;
+}
+
+.add-username input {
+  box-sizing: border-box;
+  padding: 2px 10px 0 10px;
+  margin: 0 4px 0 0;
+  width: 240px;
+  height: 34px;
+}
+
+.add-username .btn-add {
+  background-color: #0e9dd9;
+  color: #ffffff;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  display: block;
+}
+
+.online-users, .offline-users {
+  margin-bottom: 20px;
+}
+
 .cards-container {
   display: flex;
   flex-direction: row;
@@ -37,29 +66,4 @@ h3 {
 
 .card .card-details div {
   margin: 6px 0;
-}
-
-.add-username {
-  margin: 0 8px 26px;
-  display: flex;
-}
-
-.add-username input {
-  box-sizing: border-box;
-  padding: 2px 10px 0 10px;
-  margin: 0 4px 0 0;
-  width: 240px;
-  height: 34px;
-}
-
-.add-username .btn-add {
-  background-color: #0e9dd9;
-  color: #ffffff;
-  border: none;
-  font-size: 24px;
-  font-weight: bold;
-  width: 34px;
-  height: 34px;
-  cursor: pointer;
-  display: block;
 }
