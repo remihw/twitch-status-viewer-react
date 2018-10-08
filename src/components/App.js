@@ -19,20 +19,21 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    this.getDataForEachUsername();
+
+    this.getDataFromTwitch(this.state.usernames)
+      .then(data => this.updateUserCardInformation(data));
+
   };
 
-  getDataForEachUsername = () => {
+  getDataFromTwitch = (usernames) => {
 
     let promises = [];
 
-    this.state.usernames.forEach(username => {
+    usernames.forEach(username => {
       promises.push(this.getUserStreamingData(username));
     });
 
-    Promise.all(promises)
-
-      .then(evt => this.updateUserCards(evt));
+    return Promise.all(promises);
 
   };
 
@@ -59,17 +60,16 @@ class App extends Component {
   getUserChannelData = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/channels/${username}`)
-
       .then(response => response.json());
 
   };
 
-  updateUserCards = (data) => {
+  updateUserCardInformation = (userData) => {
 
-    const userStreamingData = data.filter(user => {
+    const userStreamingData = userData.filter(user => {
             return typeof(user.stream) !== 'undefined'
           }),
-          userChannelData = data.filter(user => {
+          userChannelData = userData.filter(user => {
             return typeof(user.stream) === 'undefined'
           });
 
@@ -86,9 +86,8 @@ class App extends Component {
 
     this.setState({ usernames: [...this.state.usernames, username] });
 
-    this.getUserStreamingData(username)
-
-      .then(evt => this.updateUserCards([ evt ]));
+    this.getDataFromTwitch([ username ])
+      .then(data => this.updateUserCardInformation(data));
 
   };
 
