@@ -11,7 +11,7 @@ class App extends Component {
     super();
 
     this.state = {
-      usernames: ['streamerhouse', 'saltybet', 'mtggoldfish'],
+      usernames: ['streamerhouse', 'saltybet', 'mtggoldfish', 'twitch'],
       userStreamingData: [],
       userChannelData: []
     };
@@ -20,12 +20,12 @@ class App extends Component {
 
   componentDidMount = () => {
 
-    this.getDataFromTwitch(this.state.usernames)
-      .then(data => this.updateUserCardInformation(data));
+    this.getUserDataFromTwitch(this.state.usernames)
+      .then(userData => this.updateUserDataStates(userData));
 
   };
 
-  getDataFromTwitch = (usernames) => {
+  getUserDataFromTwitch = (usernames) => {
 
     let promises = [];
 
@@ -45,13 +45,13 @@ class App extends Component {
         return response.json();
       })
 
-      .then(data => {
+      .then(userData => {
 
-        if (data.stream === null) {
+        if (userData.stream === null) {
           return this.getUserChannelData(username);
         }
 
-        return data;
+        return userData;
 
       });
 
@@ -64,7 +64,7 @@ class App extends Component {
 
   };
 
-  updateUserCardInformation = (userData) => {
+  updateUserDataStates = (userData) => {
 
     const userStreamingData = userData.filter(user => {
             return typeof(user.stream) !== 'undefined'
@@ -75,19 +75,31 @@ class App extends Component {
 
     this.setState({
 
-      userStreamingData: [...this.state.userStreamingData, ...userStreamingData],
-      userChannelData: [...this.state.userChannelData, ...userChannelData]
+      userStreamingData:
+        [...this.state.userStreamingData, ...userStreamingData],
+      userChannelData:
+        [...this.state.userChannelData, ...userChannelData]
 
     });
 
   };
 
-  addNewUsername = (username) => {
+  addNewUserCard = (username) => {
 
     this.setState({ usernames: [...this.state.usernames, username] });
 
-    this.getDataFromTwitch([ username ])
-      .then(data => this.updateUserCardInformation(data));
+    this.getUserDataFromTwitch([ username ])
+      .then(userData => this.updateUserDataStates(userData));
+
+  };
+
+  deleteUserStreamingCard = (username) => {
+
+    const deletedUsername = username.toLowerCase();
+
+    this.setState({
+      usernames: this.state.usernames.filter(username => deletedUsername),
+    });
 
   };
 
@@ -98,12 +110,12 @@ class App extends Component {
       <div>
 
         <div>
-          <AddUsername addNewUsername={this.addNewUsername} />
+          <AddUsername addNewUserCard={this.addNewUserCard} />
         </div>
 
-        <div className='online-users'>
+        <div className='streaming-users'>
 
-          <h3>STREAMING:</h3>
+          <h4>STREAMING:</h4>
 
           <div className='cards-container'>
             <UserStreamingCardList userStreamingData={this.state.userStreamingData} />
@@ -113,7 +125,7 @@ class App extends Component {
 
         <div className='offline-users'>
 
-          <h3>OFFLINE:</h3>
+          <h4>OFFLINE:</h4>
 
           <div className='cards-container'>
             <UserChannelCardList userChannelData={this.state.userChannelData} />
