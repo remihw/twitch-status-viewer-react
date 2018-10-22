@@ -21,7 +21,7 @@ class App extends Component {
   componentDidMount = () => {
 
     this.getUserDataFromTwitch(this.state.usernames)
-      .then(userData => this.updateUserDataStates(userData));
+      .then(evt => this.updateComponentView(evt));
 
   };
 
@@ -64,22 +64,30 @@ class App extends Component {
 
   };
 
-  updateUserDataStates = (userData) => {
+  updateComponentView = (data) => {
 
-    const userStreamingData = userData.filter(user => {
-            return typeof(user.stream) !== 'undefined'
-          }),
-          userChannelData = userData.filter(user => {
-            return typeof(user.stream) === 'undefined'
-          });
+    this.updateUserStreamingDataState(data.filter(user => {
+      return typeof(user.stream) !== 'undefined'
+    }))
+
+    this.updateUserChannelDataState(data.filter(user => {
+      return typeof(user.stream) === 'undefined'
+    }))
+
+  };
+
+  updateUserStreamingDataState = (data) => {
 
     this.setState({
+      userStreamingData: [...this.state.userStreamingData, ...data]
+    });
 
-      userStreamingData:
-        [...this.state.userStreamingData, ...userStreamingData],
-      userChannelData:
-        [...this.state.userChannelData, ...userChannelData]
+  };
 
+  updateUserChannelDataState = (data) => {
+
+    this.setState({
+      userChannelData: [...this.state.userChannelData, ...data]
     });
 
   };
@@ -89,16 +97,24 @@ class App extends Component {
     this.setState({ usernames: [...this.state.usernames, username] });
 
     this.getUserDataFromTwitch([ username ])
-      .then(userData => this.updateUserDataStates(userData));
+      .then(evt => this.updateComponentView(evt));
 
   };
 
-  deleteUserStreamingCard = (username) => {
+  deleteStreamingCard = (evt) => {
 
-    const deletedUsername = username.toLowerCase();
+    const deletedUsername = evt.toLowerCase();
 
     this.setState({
-      usernames: this.state.usernames.filter(username => deletedUsername),
+
+      usernames: this.state.usernames.filter(username => {
+        return username === deletedUsername
+      }),
+
+      userStreamingData: this.state.userStreamingData.filter(user => {
+        return user.stream.channel.display_name === deletedUsername;
+      })
+
     });
 
   };
@@ -118,7 +134,10 @@ class App extends Component {
           <h4>STREAMING:</h4>
 
           <div className='cards-container'>
-            <UserStreamingCardList userStreamingData={this.state.userStreamingData} />
+            <UserStreamingCardList
+              userStreamingData={this.state.userStreamingData}
+              deleteStreamingCard={this.deleteStreamingCard}
+            />
           </div>
 
         </div>
