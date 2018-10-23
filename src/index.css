@@ -14,10 +14,9 @@ h4 {
 }
 
 .add-username input {
-  border-style: solid 1px #493e58;
+  border: solid 1px #0e9dd9;
   box-sizing: border-box;
   padding: 2px 10px 0 10px;
-  margin: 0 2px 0 0;
   width: 240px;
   height: 34px;
 }

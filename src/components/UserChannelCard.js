@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 
 const UserChannelCard = (props) => {
 
+  const onClick = () => {
+    props.deleteChannelCard(props.user.display_name);
+  }
+
   return (
 
     <div className='card'>
 
-      <div className='btn-delete-card'>X</div>
+      <div className='btn-delete-card' onClick={onClick}>X</div>
 
       <img src={props.user.logo} />
 

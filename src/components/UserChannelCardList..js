@@ -6,7 +6,9 @@ const UserChannelCardList = (props) => {
   return props.userChannelData.map(user => {
 
     return (
-      <UserChannelCard user={user} key={user.name} />
+      <UserChannelCard user={user} key={user.name}
+        deleteChannelCard={props.deleteChannelCard}
+      />
     );
 
   });

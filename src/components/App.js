@@ -101,18 +101,40 @@ class App extends Component {
 
   };
 
-  deleteStreamingCard = (evt) => {
+  deleteStreamingCard = (deletedUsername) => {
 
-    const deletedUsername = evt.toLowerCase();
+    this.setState({
+
+      userStreamingData: this.state.userStreamingData.filter(user => {
+        return user.stream.channel.display_name !== deletedUsername;
+      })
+
+    });
+
+    this.deleteUsername(deletedUsername);
+
+  };
+
+  deleteChannelCard = (deletedUsername) => {
+
+    this.setState({
+
+      userChannelData: this.state.userChannelData.filter(user => {
+        return user.display_name !== deletedUsername;
+      })
+
+    });
+
+    this.deleteUsername(deletedUsername);
+
+  };
+
+  deleteUsername = (deletedUsername) => {
 
     this.setState({
 
       usernames: this.state.usernames.filter(username => {
-        return username === deletedUsername
-      }),
-
-      userStreamingData: this.state.userStreamingData.filter(user => {
-        return user.stream.channel.display_name === deletedUsername;
+        return username === deletedUsername.toLowerCase();
       })
 
     });
@@ -134,8 +156,7 @@ class App extends Component {
           <h4>STREAMING:</h4>
 
           <div className='cards-container'>
-            <UserStreamingCardList
-              userStreamingData={this.state.userStreamingData}
+            <UserStreamingCardList userStreamingData={this.state.userStreamingData}
               deleteStreamingCard={this.deleteStreamingCard}
             />
           </div>
@@ -147,7 +168,9 @@ class App extends Component {
           <h4>OFFLINE:</h4>
 
           <div className='cards-container'>
-            <UserChannelCardList userChannelData={this.state.userChannelData} />
+            <UserChannelCardList userChannelData={this.state.userChannelData}
+              deleteChannelCard={this.deleteChannelCard}
+            />
           </div>
 
         </div>
