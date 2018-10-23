@@ -3,6 +3,10 @@ import UserStreamingCard from './UserStreamingCard';
 
 const UserStreamingCardList = (props) => {
 
+  if (props.userStreamingData.length === 0) {
+    return <div className='no-users'>No users are currently streaming</div>;
+  }
+
   return props.userStreamingData.map(user => {
 
     return (

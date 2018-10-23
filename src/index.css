@@ -75,3 +75,8 @@ h4 {
   right: 11px;
   cursor: pointer;
 }
+
+.no-users {
+  color: grey;
+  padding: 12px 9px 0;
+}
