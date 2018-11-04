@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import AddUsername from './AddUsername';
-import UserStreamingCardList from './UserStreamingCardList';
-import UserChannelCardList from './UserChannelCardList.';
+
+import AddNewStreamer from './components/add-new-streamer/AddNewStreamer';
+import OnlineStreamers from './components/online-streamers/OnlineStreamers';
+import OfflineStreamers from './components/offline-streamers/OfflineStreamers';
 
 class App extends Component {
 
@@ -12,32 +13,32 @@ class App extends Component {
 
     this.state = {
       usernames: ['streamerhouse', 'saltybet', 'mtggoldfish', 'twitch'],
-      userStreamingData: [],
-      userChannelData: []
+      onlineStreamerData: [],
+      offlineStreamerData: []
     };
 
   };
 
   componentDidMount = () => {
 
-    this.getUserDataFromTwitch(this.state.usernames)
+    this.getDataFromTwitch(this.state.usernames)
       .then(evt => this.updateComponentView(evt));
 
   };
 
-  getUserDataFromTwitch = (usernames) => {
+  getDataFromTwitch = (usernames) => {
 
     let promises = [];
 
     usernames.forEach(username => {
-      promises.push(this.getUserStreamingData(username));
+      promises.push(this.getOnlineStreamerDetails(username));
     });
 
     return Promise.all(promises);
 
   };
 
-  getUserStreamingData = (username) => {
+  getOnlineStreamerDetails = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${username}`)
 
@@ -48,7 +49,7 @@ class App extends Component {
       .then(userData => {
 
         if (userData.stream === null) {
-          return this.getUserChannelData(username);
+          return this.getOfflineStreamerDetails(username);
         }
 
         return userData;
@@ -57,7 +58,7 @@ class App extends Component {
 
   };
 
-  getUserChannelData = (username) => {
+  getOfflineStreamerDetails = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/channels/${username}`)
       .then(response => response.json());
@@ -66,28 +67,28 @@ class App extends Component {
 
   updateComponentView = (data) => {
 
-    this.updateUserStreamingDataState(data.filter(user => {
+    this.updateOnlineStreamerDataState(data.filter(user => {
       return typeof(user.stream) !== 'undefined'
     }))
 
-    this.updateUserChannelDataState(data.filter(user => {
+    this.updateOfflineStreamerDataState(data.filter(user => {
       return typeof(user.stream) === 'undefined'
     }))
 
   };
 
-  updateUserStreamingDataState = (data) => {
+  updateOnlineStreamerDataState = (data) => {
 
     this.setState({
-      userStreamingData: [...this.state.userStreamingData, ...data]
+      onlineStreamerData: [...this.state.onlineStreamerData, ...data]
     });
 
   };
 
-  updateUserChannelDataState = (data) => {
+  updateOfflineStreamerDataState = (data) => {
 
     this.setState({
-      userChannelData: [...this.state.userChannelData, ...data]
+      offlineStreamerData: [...this.state.offlineStreamerData, ...data]
     });
 
   };
@@ -96,7 +97,7 @@ class App extends Component {
 
     this.setState({ usernames: [...this.state.usernames, username] });
 
-    this.getUserDataFromTwitch([ username ])
+    this.getDataFromTwitch([ username ])
       .then(evt => this.updateComponentView(evt));
 
   };
@@ -105,7 +106,7 @@ class App extends Component {
 
     this.setState({
 
-      userStreamingData: this.state.userStreamingData.filter(user => {
+      onlineStreamerData: this.state.onlineStreamerData.filter(user => {
         return user.stream.channel.display_name !== deletedUsername;
       })
 
@@ -119,7 +120,7 @@ class App extends Component {
 
     this.setState({
 
-      userChannelData: this.state.userChannelData.filter(user => {
+      offlineStreamerData: this.state.offlineStreamerData.filter(user => {
         return user.display_name !== deletedUsername;
       })
 
@@ -148,7 +149,7 @@ class App extends Component {
       <div>
 
         <div>
-          <AddUsername addNewUserCard={this.addNewUserCard} />
+          <AddNewStreamer addNewUserCard={this.addNewUserCard} />
         </div>
 
         <div className='streaming-users'>
@@ -156,9 +157,11 @@ class App extends Component {
           <h4>STREAMING:</h4>
 
           <div className='cards-container'>
-            <UserStreamingCardList userStreamingData={this.state.userStreamingData}
+
+            <OnlineStreamers onlineStreamerData={this.state.onlineStreamerData}
               deleteStreamingCard={this.deleteStreamingCard}
             />
+
           </div>
 
         </div>
@@ -168,9 +171,11 @@ class App extends Component {
           <h4>OFFLINE:</h4>
 
           <div className='cards-container'>
-            <UserChannelCardList userChannelData={this.state.userChannelData}
+
+            <OfflineStreamers offlineStreamerData={this.state.offlineStreamerData}
               deleteChannelCard={this.deleteChannelCard}
             />
+
           </div>
 
         </div>

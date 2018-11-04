@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const UserChannelCard = (props) => {
+const OfflineStreamerDetails = (props) => {
 
   const onClick = () => {
     props.deleteChannelCard(props.user.display_name);
@@ -25,4 +25,4 @@ const UserChannelCard = (props) => {
 
 };
 
-export default UserChannelCard;
+export default OfflineStreamerDetails;
