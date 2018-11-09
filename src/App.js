@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import AddNewStreamer from './components/add-new-streamer/AddNewStreamer';
-import OnlineStreamers from './components/online-streamers/OnlineStreamers';
-import OfflineStreamers from './components/offline-streamers/OfflineStreamers';
+import AddNewStream from './components/add-new-stream/AddNewStream';
+import OnlineStreams from './components/online-streams/OnlineStreams';
+import OfflineStreams from './components/offline-streams/OfflineStreams';
 
 class App extends Component {
 
@@ -13,8 +13,8 @@ class App extends Component {
 
     this.state = {
       usernames: ['streamerhouse', 'saltybet', 'mtggoldfish', 'twitch'],
-      onlineStreamerData: [],
-      offlineStreamerData: []
+      onlineStreamData: [],
+      offlineStreamData: []
     };
 
   };
@@ -31,14 +31,14 @@ class App extends Component {
     let promises = [];
 
     usernames.forEach(username => {
-      promises.push(this.getOnlineStreamerDetails(username));
+      promises.push(this.getOnlineStreamDetails(username));
     });
 
     return Promise.all(promises);
 
   };
 
-  getOnlineStreamerDetails = (username) => {
+  getOnlineStreamDetails = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${username}`)
 
@@ -49,7 +49,7 @@ class App extends Component {
       .then(userData => {
 
         if (userData.stream === null) {
-          return this.getOfflineStreamerDetails(username);
+          return this.getOfflineStreamDetails(username);
         }
 
         return userData;
@@ -58,7 +58,7 @@ class App extends Component {
 
   };
 
-  getOfflineStreamerDetails = (username) => {
+  getOfflineStreamDetails = (username) => {
 
     return fetch(`https://wind-bow.glitch.me/twitch-api/channels/${username}`)
       .then(response => response.json());
@@ -67,28 +67,28 @@ class App extends Component {
 
   updateComponentView = (data) => {
 
-    this.updateOnlineStreamerDataState(data.filter(user => {
+    this.updateOnlineStreamDataState(data.filter(user => {
       return typeof(user.stream) !== 'undefined'
     }))
 
-    this.updateOfflineStreamerDataState(data.filter(user => {
+    this.updateOfflineStreamDataState(data.filter(user => {
       return typeof(user.stream) === 'undefined'
     }))
 
   };
 
-  updateOnlineStreamerDataState = (data) => {
+  updateOnlineStreamDataState = (data) => {
 
     this.setState({
-      onlineStreamerData: [...this.state.onlineStreamerData, ...data]
+      onlineStreamData: [...this.state.onlineStreamData, ...data]
     });
 
   };
 
-  updateOfflineStreamerDataState = (data) => {
+  updateOfflineStreamDataState = (data) => {
 
     this.setState({
-      offlineStreamerData: [...this.state.offlineStreamerData, ...data]
+      offlineStreamData: [...this.state.offlineStreamData, ...data]
     });
 
   };
@@ -106,7 +106,7 @@ class App extends Component {
 
     this.setState({
 
-      onlineStreamerData: this.state.onlineStreamerData.filter(user => {
+      onlineStreamData: this.state.onlineStreamData.filter(user => {
         return user.stream.channel.display_name !== deletedUsername;
       })
 
@@ -120,7 +120,7 @@ class App extends Component {
 
     this.setState({
 
-      offlineStreamerData: this.state.offlineStreamerData.filter(user => {
+      offlineStreamData: this.state.offlineStreamData.filter(user => {
         return user.display_name !== deletedUsername;
       })
 
@@ -148,37 +148,19 @@ class App extends Component {
 
       <div>
 
-        <div>
-          <AddNewStreamer addNewUserCard={this.addNewUserCard} />
-        </div>
+        <AddNewStream
+          addNewUserCard={this.addNewUserCard}
+        />
 
-        <div className='streaming-users'>
+        <OnlineStreams
+          onlineStreamData={this.state.onlineStreamData}
+          deleteStreamingCard={this.deleteStreamingCard}
+        />
 
-          <h4>STREAMING:</h4>
-
-          <div className='cards-container'>
-
-            <OnlineStreamers onlineStreamerData={this.state.onlineStreamerData}
-              deleteStreamingCard={this.deleteStreamingCard}
-            />
-
-          </div>
-
-        </div>
-
-        <div className='offline-users'>
-
-          <h4>OFFLINE:</h4>
-
-          <div className='cards-container'>
-
-            <OfflineStreamers offlineStreamerData={this.state.offlineStreamerData}
-              deleteChannelCard={this.deleteChannelCard}
-            />
-
-          </div>
-
-        </div>
+        <OfflineStreams
+          offlineStreamData={this.state.offlineStreamData}
+          deleteChannelCard={this.deleteChannelCard}
+        />
 
       </div>
 

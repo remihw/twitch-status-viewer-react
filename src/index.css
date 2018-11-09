@@ -33,7 +33,7 @@ h4 {
   display: block;
 }
 
-.streaming-users, .offline-users {
+.online-streams, .offline-streams {
   margin-bottom: 20px;
 }
 
