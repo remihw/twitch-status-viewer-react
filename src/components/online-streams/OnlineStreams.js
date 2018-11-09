@@ -3,7 +3,7 @@ import OnlineStreamDetails from './online-stream-details/OnlineStreamDetails';
 
 const OnlineStreams = (props) => {
 
-  const currentlyStreaming = props.onlineStreamData.map(user => {
+  const onlineStreamsList = props.onlineStreamData.map(user => {
 
     return (
       <OnlineStreamDetails
@@ -15,10 +15,6 @@ const OnlineStreams = (props) => {
 
   });
 
-  if (props.onlineStreamData.length === 0) {
-    return <div className='no-users'>No users are currently streaming</div>;
-  }
-
   return (
 
     <div className='online-streams'>
@@ -26,7 +22,11 @@ const OnlineStreams = (props) => {
       <h4>STREAMING:</h4>
 
       <div className='cards-container'>
-        {currentlyStreaming}
+        {
+          onlineStreamsList.length > 0
+          ? onlineStreamsList
+          : <div className='no-users'>All your streams are offline...</div>
+        }
       </div>
 
     </div>
