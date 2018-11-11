@@ -1,5 +1,4 @@
 .add-username {
-  margin: 0 8px 30px;
   display: flex;
 }
 
@@ -21,4 +20,11 @@
   height: 30px;
   cursor: pointer;
   display: block;
+}
+
+.channel-not-found {
+  color: #6b6b6b;
+  font-style: italic;
+  display: block;
+  height: 20px;
 }

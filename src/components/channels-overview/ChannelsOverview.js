@@ -6,7 +6,7 @@ const ChannelsOverview = (props) => {
 
   return (
 
-  <div>
+  <div className='channels-overview'>
 
     <OnlineChannels
       onlineChannels={props.onlineChannels}

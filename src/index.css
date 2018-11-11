@@ -5,8 +5,9 @@
 
 body {
   font-family: 'Roboto', sans-serif;
+  padding: 8px;
 }
 
 h4 {
-  margin: 0 8px;
+  margin: 0;
 }

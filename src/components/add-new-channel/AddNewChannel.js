@@ -3,21 +3,35 @@ import React, { Component } from 'react';
 class AddNewChannel extends Component {
 
   handleSubmit = () => {
-    this.props.addNewChannel(this.refs.usernameInput.value);
+
+    const username = this.refs.usernameInput.value;
+
+    this.props.addUsername(username);
+    this.props.getChannelDetailsFromTwitch([username]);
+
     this.refs.usernameInput.value = '';
+
   };
 
   render() {
 
     return (
 
-      <div className='add-username'>
+      <div>
 
-        <input ref='usernameInput'></input>
+        <div className='add-username'>
 
-        <button className='btn-add' onClick={this.handleSubmit.bind(this)}>
-          <span>+</span>
-        </button>
+          <input ref='usernameInput'></input>
+
+          <button className='btn-add' onClick={this.handleSubmit.bind(this)}>
+            <span>+</span>
+          </button>
+
+        </div>
+
+          <p className='channel-not-found'>
+            {this.props.isChannelNotFound && <span>Channel not found</span>}
+          </p>
 
       </div>
 

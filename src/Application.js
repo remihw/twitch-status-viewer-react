@@ -11,17 +11,16 @@ class Application extends Component {
     super();
 
     this.state = {
-      usernames: ['streamerhouse', 'saltybet', 'mtggoldfish', 'twitch', 'magic'],
+      usernames: ['streamerhouse', 'saltybet', 'mtggoldfish', 'twitch'],
       onlineChannels: [],
-      offlineChannels: []
+      offlineChannels: [],
+      isChannelNotFound: false
     };
 
   };
 
   componentDidMount = () => {
-
     this.getChannelDetailsFromTwitch(this.state.usernames);
-
   };
 
   getChannelDetailsFromTwitch = (usernames) => {
@@ -66,6 +65,13 @@ class Application extends Component {
 
   updateChannels = (data) => {
 
+    if (data.length === 1 && typeof(data[0].error) !== 'undefined') {
+      this.setState({ isChannelNotFound: true });
+      return;
+    }
+
+    this.setState({ isChannelNotFound: false });
+
     this.updateOnlineChannels(data.filter(user => {
       return typeof(user.stream) !== 'undefined'
     }))
@@ -92,13 +98,13 @@ class Application extends Component {
 
   };
 
-  addNewChannel = (username) => {
+  addUsername = (username) => {
+
+    // add code to handle double username error here?
 
     this.setState({
       usernames: [...this.state.usernames, username]
     });
-
-    this.getChannelDetailsFromTwitch([ username ]);
 
   };
 
@@ -149,7 +155,9 @@ class Application extends Component {
       <div>
 
         <AddNewChannel
-          addNewChannel={this.addNewChannel}
+          addUsername={this.addUsername}
+          getChannelDetailsFromTwitch={this.getChannelDetailsFromTwitch}
+          isChannelNotFound={this.state.isChannelNotFound}
         />
 
         <ChannelsOverview
