@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-class AddNewStreamer extends Component {
+class AddNewChannel extends Component {
 
   handleSubmit = () => {
-    this.props.addNewUserCard(this.refs.usernameInput.value);
+    this.props.addNewChannel(this.refs.usernameInput.value);
     this.refs.usernameInput.value = '';
   };
 
@@ -27,4 +27,4 @@ class AddNewStreamer extends Component {
 
 }
 
-export default AddNewStreamer;
+export default AddNewChannel;

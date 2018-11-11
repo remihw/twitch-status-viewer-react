@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import OnlineStreamDetails from './online-stream-details/OnlineStreamDetails';
+import OnlineChannelDetails from './online-channel-details/OnlineChannelDetails';
 
 const OnlineStreams = (props) => {
 
-  const onlineStreamsList = props.onlineStreamData.map(user => {
+  const onlineChannels = props.onlineChannels.map(user => {
 
     return (
-      <OnlineStreamDetails
+
+      <OnlineChannelDetails
         user={user}
         key={user.stream.channel.display_name}
-        deleteStreamingCard={props.deleteStreamingCard}
+        deleteOnlineChannel={props.deleteOnlineChannel}
       />
+
     );
 
   });
@@ -23,8 +25,8 @@ const OnlineStreams = (props) => {
 
       <div className='cards-container'>
         {
-          onlineStreamsList.length > 0
-          ? onlineStreamsList
+          onlineChannels.length > 0
+          ? onlineChannels
           : <div className='no-users'>All your streams are offline...</div>
         }
       </div>

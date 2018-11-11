@@ -1,0 +1,51 @@
+.online-streams, .offline-streams {
+  margin-bottom: 20px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #493e58;
+  color: #ffffff;
+  width: 300px;
+  padding: 14px;
+  margin: 8px;
+  border-radius: 8px;
+}
+
+.card img {
+  height: 80px;
+  width: 80px;
+  margin: 0 12px 0 0;
+}
+
+.card .username {
+  font-weight: bold;
+}
+
+.card .card-details div {
+  margin: 6px 0;
+}
+
+.card .btn-delete-card {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  cursor: pointer;
+}
+
+.online-streams .card {
+  background-color: #665482;
+}
+
+.no-users {
+  color: grey;
+  padding: 12px 9px 0;
+}

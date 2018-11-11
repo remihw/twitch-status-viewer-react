@@ -1,0 +1,24 @@
+.add-username {
+  margin: 0 8px 30px;
+  display: flex;
+}
+
+.add-username input {
+  border: solid 1px #0e9dd9;
+  box-sizing: border-box;
+  padding: 2px 10px 0 10px;
+  width: 240px;
+  height: 30px;
+}
+
+.add-username .btn-add {
+  background-color: #0e9dd9;
+  color: #ffffff;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: block;
+}
