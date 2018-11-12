@@ -4,6 +4,7 @@ const OfflineChannelDetails = (props) => {
 
   const onClick = () => {
     props.deleteOfflineChannel(props.user.display_name);
+    props.deleteUsername(props.user.display_name);
   }
 
   return (

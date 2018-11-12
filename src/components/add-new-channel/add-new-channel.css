@@ -22,8 +22,9 @@
   display: block;
 }
 
-.channel-not-found {
-  color: #6b6b6b;
+.error-message {
+  color: #d10202;
+  font-size: 14px;
   font-style: italic;
   display: block;
   height: 20px;

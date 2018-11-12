@@ -2,14 +2,43 @@ import React, { Component } from 'react';
 
 class AddNewChannel extends Component {
 
+  constructor() {
+
+    super();
+
+    this.state = {
+      isUsernameAlreadyAdded: false
+    };
+
+  };
+
   handleSubmit = () => {
 
-    const username = this.refs.usernameInput.value;
+    const newUsername = this.refs.usernameInput.value;
 
-    this.props.addUsername(username);
-    this.props.getChannelDetailsFromTwitch([username]);
+    if (this.isUsernameAlreadyAdded(newUsername)) {
+
+      this.setState({ isUsernameAlreadyAdded: true })
+      return;
+
+    }
+
+    this.setState({ isUsernameAlreadyAdded: false })
+
+    // TODO: do this only after a channel has been found??
+    this.props.addNewUsername(newUsername);
+
+    this.props.getChannelDetailsFromTwitch([ newUsername ]);
 
     this.refs.usernameInput.value = '';
+
+  };
+
+  isUsernameAlreadyAdded(newUsername) {
+
+    return this.props.usernames.filter(username => {
+      return username === newUsername;
+    }).length === 1;
 
   };
 
@@ -29,9 +58,17 @@ class AddNewChannel extends Component {
 
         </div>
 
-          <p className='channel-not-found'>
-            {this.props.isChannelNotFound && <span>Channel not found</span>}
-          </p>
+        <p className='error-message'>
+
+          {this.props.isChannelNotFound &&
+            <span>This channel does not seem to exist</span>
+          }
+
+          {this.state.isUsernameAlreadyAdded &&
+            <span>You already added this channel</span>
+          }
+
+        </p>
 
       </div>
 

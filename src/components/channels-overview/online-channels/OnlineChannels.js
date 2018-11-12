@@ -11,6 +11,7 @@ const OnlineStreams = (props) => {
         user={user}
         key={user.stream.channel.display_name}
         deleteOnlineChannel={props.deleteOnlineChannel}
+        deleteUsername={props.deleteUsername}
       />
 
     );

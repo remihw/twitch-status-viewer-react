@@ -13,8 +13,7 @@ class Application extends Component {
     this.state = {
       usernames: ['streamerhouse', 'saltybet', 'mtggoldfish', 'twitch'],
       onlineChannels: [],
-      offlineChannels: [],
-      isChannelNotFound: false
+      offlineChannels: []
     };
 
   };
@@ -65,12 +64,11 @@ class Application extends Component {
 
   updateChannels = (data) => {
 
+    // TODO: the username is already added here, add this check sooner when the
+    // username is still available and can be passed to addNewUsername.
     if (data.length === 1 && typeof(data[0].error) !== 'undefined') {
-      this.setState({ isChannelNotFound: true });
       return;
     }
-
-    this.setState({ isChannelNotFound: false });
 
     this.updateOnlineChannels(data.filter(user => {
       return typeof(user.stream) !== 'undefined'
@@ -98,9 +96,10 @@ class Application extends Component {
 
   };
 
-  addUsername = (username) => {
+  addNewUsername = (username) => {
 
-    // add code to handle double username error here?
+    // Note: only add the username after we get the data back from Twitch so
+    // that we know for sure that the user actually exists.
 
     this.setState({
       usernames: [...this.state.usernames, username]
@@ -118,8 +117,6 @@ class Application extends Component {
 
     });
 
-    this.deleteUsername(deletedUsername);
-
   };
 
   deleteOfflineChannel = (deletedUsername) => {
@@ -132,8 +129,6 @@ class Application extends Component {
 
     });
 
-    this.deleteUsername(deletedUsername);
-
   };
 
   deleteUsername = (deletedUsername) => {
@@ -141,7 +136,7 @@ class Application extends Component {
     this.setState({
 
       usernames: this.state.usernames.filter(username => {
-        return username === deletedUsername.toLowerCase();
+        return username !== deletedUsername.toLowerCase();
       })
 
     });
@@ -155,16 +150,18 @@ class Application extends Component {
       <div>
 
         <AddNewChannel
-          addUsername={this.addUsername}
+          usernames={this.state.usernames}
+          addNewUsername={this.addNewUsername}
           getChannelDetailsFromTwitch={this.getChannelDetailsFromTwitch}
           isChannelNotFound={this.state.isChannelNotFound}
         />
 
         <ChannelsOverview
           onlineChannels={this.state.onlineChannels}
-          deleteOnlineChannel={this.deleteOnlineChannel}
           offlineChannels={this.state.offlineChannels}
+          deleteOnlineChannel={this.deleteOnlineChannel}
           deleteOfflineChannel={this.deleteOfflineChannel}
+          deleteUsername={this.deleteUsername}
         />
 
       </div>

@@ -11,6 +11,7 @@ const OfflineChannels = (props) => {
         user={user}
         key={user.name}
         deleteOfflineChannel={props.deleteOfflineChannel}
+        deleteUsername={props.deleteUsername}
       />
 
     );

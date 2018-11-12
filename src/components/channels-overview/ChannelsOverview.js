@@ -11,11 +11,13 @@ const ChannelsOverview = (props) => {
     <OnlineChannels
       onlineChannels={props.onlineChannels}
       deleteOnlineChannel={props.deleteOnlineChannel}
+      deleteUsername={props.deleteUsername}
     />
 
     <OfflineChannels
       offlineChannels={props.offlineChannels}
       deleteOfflineChannel={props.deleteOfflineChannel}
+      deleteUsername={props.deleteUsername}
     />
 
   </div>

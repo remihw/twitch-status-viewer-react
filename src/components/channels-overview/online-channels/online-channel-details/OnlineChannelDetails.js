@@ -4,6 +4,7 @@ const OnlineChannelDetails = (props) => {
 
   const onClick = () => {
     props.deleteOnlineChannel(props.user.stream.channel.display_name);
+    props.deleteUsername(props.user.stream.channel.display_name);
   }
 
   return (
