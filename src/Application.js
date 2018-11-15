@@ -26,16 +26,16 @@ class Application extends Component {
 
   updateChannels = (data) => {
 
-    if (data.length === 1 && typeof(data[0].error) !== 'undefined') {
+    if (data.length === 1 && data[0].hasOwnProperty('usernameNotFound')) {
       return;
     }
 
     this.updateOnlineChannels(data.filter(user => {
-      return typeof(user.stream) !== 'undefined'
+      return user.hasOwnProperty('stream');
     }))
 
     this.updateOfflineChannels(data.filter(user => {
-      return typeof(user.stream) === 'undefined'
+      return !user.hasOwnProperty('stream');
     }))
 
   };

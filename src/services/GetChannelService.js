@@ -37,7 +37,20 @@ const getChannelService = {
   getOfflineChannelDetails(username) {
 
     return fetch(`${this.baseUrl}/channels/${username}`)
-      .then(response => response.json());
+
+      .then(response => {
+        return response.json()
+      })
+
+      .then(data => {
+
+        if (data.hasOwnProperty('error')) {
+          return { usernameNotFound: username };
+        }
+
+        return data;
+
+      })
 
   }
 

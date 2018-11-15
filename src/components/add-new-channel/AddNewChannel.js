@@ -18,10 +18,8 @@ class AddNewChannel extends Component {
     const newUsername = this.refs.usernameInput.value;
 
     if (this.isUsernameAlreadyAdded(newUsername)) {
-
       this.setState({ isUsernameAlreadyAdded: true })
       return;
-
     }
 
     getChannelService.getChannelDetails([ newUsername ])
