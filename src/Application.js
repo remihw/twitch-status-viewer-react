@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import getChannelService from './services/GetChannelService';
 import AddNewChannel from './components/add-new-channel/AddNewChannel';
 import ChannelsOverview from './components/channels-overview/ChannelsOverview';
 
@@ -19,53 +20,12 @@ class Application extends Component {
   };
 
   componentDidMount = () => {
-    this.getChannelDetailsFromTwitch(this.state.usernames);
-  };
-
-  getChannelDetailsFromTwitch = (usernames) => {
-
-    let promises = [];
-
-    usernames.forEach(username => {
-      promises.push(this.getOnlineChannelDetails(username));
-    });
-
-    Promise.all(promises)
+    getChannelService.getChannelDetails(this.state.usernames)
       .then(evt => this.updateChannels(evt));
-
-  };
-
-  getOnlineChannelDetails = (username) => {
-
-    return fetch(`https://wind-bow.glitch.me/twitch-api/streams/${username}`)
-
-      .then(response => {
-        return response.json();
-      })
-
-      .then(data => {
-
-        if (data.stream === null) {
-          return this.getOfflineChannelDetails(username);
-        }
-
-        return data;
-
-      });
-
-  };
-
-  getOfflineChannelDetails = (username) => {
-
-    return fetch(`https://wind-bow.glitch.me/twitch-api/channels/${username}`)
-      .then(response => response.json());
-
   };
 
   updateChannels = (data) => {
 
-    // TODO: the username is already added here, add this check sooner when the
-    // username is still available and can be passed to addNewUsername.
     if (data.length === 1 && typeof(data[0].error) !== 'undefined') {
       return;
     }
@@ -97,9 +57,6 @@ class Application extends Component {
   };
 
   addNewUsername = (username) => {
-
-    // Note: only add the username after we get the data back from Twitch so
-    // that we know for sure that the user actually exists.
 
     this.setState({
       usernames: [...this.state.usernames, username]
@@ -152,7 +109,7 @@ class Application extends Component {
         <AddNewChannel
           usernames={this.state.usernames}
           addNewUsername={this.addNewUsername}
-          getChannelDetailsFromTwitch={this.getChannelDetailsFromTwitch}
+          updateChannels={this.updateChannels}
           isChannelNotFound={this.state.isChannelNotFound}
         />
 

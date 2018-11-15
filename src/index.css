@@ -4,6 +4,7 @@
 @import './components/channels-overview/channels-overview.css';
 
 body {
+  background-color: #efefef;
   font-family: 'Roboto', sans-serif;
   padding: 8px;
 }

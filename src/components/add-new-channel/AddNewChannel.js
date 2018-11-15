@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import getChannelService from '../../services/GetChannelService';
 
 class AddNewChannel extends Component {
 
@@ -23,13 +24,10 @@ class AddNewChannel extends Component {
 
     }
 
+    getChannelService.getChannelDetails([ newUsername ])
+      .then(evt => this.props.updateChannels(evt));
+
     this.setState({ isUsernameAlreadyAdded: false })
-
-    // TODO: do this only after a channel has been found??
-    this.props.addNewUsername(newUsername);
-
-    this.props.getChannelDetailsFromTwitch([ newUsername ]);
-
     this.refs.usernameInput.value = '';
 
   };
