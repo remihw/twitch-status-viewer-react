@@ -8,34 +8,38 @@ class AddNewChannel extends Component {
     super();
 
     this.state = {
-      isUsernameAlreadyAdded: false
+      newUsername: '',
+      isNewUsernameAlreadyAdded: false
     };
 
   };
 
+  handleChange = (evt) => {
+    this.setState({ newUsername: evt.target.value });
+  }
+
   handleSubmit = () => {
 
-    const newUsername = this.refs.usernameInput.value;
+    const newUsername = this.state.newUsername;
 
-    if (this.isUsernameAlreadyAdded(newUsername)) {
-      this.setState({ isUsernameAlreadyAdded: true })
+    if (this.isNewUsernameAlreadyAdded(newUsername)) {
+      this.setState({ isNewUsernameAlreadyAdded: true })
       return;
     }
 
     getChannelService.getChannelDetails([ newUsername ])
       .then(evt => this.props.updateChannels(evt));
 
-    this.setState({ isUsernameAlreadyAdded: false })
-    this.refs.usernameInput.value = '';
+    this.setState({
+      newUsername: '',
+      isNewUsernameAlreadyAdded: false
+    })
 
   };
 
-  isUsernameAlreadyAdded(newUsername) {
-
-    return this.props.usernames.filter(username => {
-      return username === newUsername;
-    }).length === 1;
-
+  isNewUsernameAlreadyAdded(newUsername) {
+    return this.props.usernames
+      .filter(username => username === newUsername).length === 1;
   };
 
   render() {
@@ -46,7 +50,7 @@ class AddNewChannel extends Component {
 
         <div className='add-username'>
 
-          <input ref='usernameInput'></input>
+          <input value={this.state.newUsername} onChange={this.handleChange}></input>
 
           <button className='btn-add' onClick={this.handleSubmit.bind(this)}>
             <span>+</span>
@@ -60,7 +64,7 @@ class AddNewChannel extends Component {
             <span>This channel does not seem to exist</span>
           }
 
-          {this.state.isUsernameAlreadyAdded &&
+          {this.state.isNewUsernameAlreadyAdded &&
             <span>You already added this channel</span>
           }
 

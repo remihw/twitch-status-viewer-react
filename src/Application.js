@@ -26,7 +26,7 @@ class Application extends Component {
 
   updateChannels = (data) => {
 
-    if (data.length === 1 && data[0].hasOwnProperty('usernameNotFound')) {
+    if (data[0].hasOwnProperty('usernameNotFound')) {
       return;
     }
 
