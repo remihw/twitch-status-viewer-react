@@ -52,7 +52,7 @@ class AddNewChannel extends Component {
 
           <input value={this.state.newUsername} onChange={this.handleChange}></input>
 
-          <button className='btn-add' onClick={this.handleSubmit.bind(this)}>
+          <button className='btn-add' onClick={this.handleSubmit}>
             <span>+</span>
           </button>
 
