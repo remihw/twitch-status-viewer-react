@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import getChannelService from './services/GetChannelService';
+import GetChannelDetailsService from './services/GetChannelDetailsService';
 import AddNewChannel from './components/add-new-channel/AddNewChannel';
 import ChannelsOverview from './components/channels-overview/ChannelsOverview';
 
@@ -20,7 +20,7 @@ class Application extends Component {
   };
 
   componentDidMount = () => {
-    getChannelService.getChannelDetails(this.state.usernames)
+    GetChannelDetailsService.getChannelDetails(this.state.usernames)
       .then(evt => this.updateChannels(evt));
   };
 

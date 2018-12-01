@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import getChannelService from '../../services/GetChannelService';
+import GetChannelDetailsService from '../../services/GetChannelDetailsService';
 
 class AddNewChannel extends Component {
 
@@ -27,7 +27,7 @@ class AddNewChannel extends Component {
       return;
     }
 
-    getChannelService.getChannelDetails([ newUsername ])
+    GetChannelDetailsService.getChannelDetails([ newUsername ])
       .then(evt => this.props.updateChannels(evt));
 
     this.setState({
